@@ -9,6 +9,7 @@ import { AudioService } from 'src/app/services/audio.service';
 import { ApiService } from 'src/app/services/api.service';
 import { of, merge, Subscription, Observable } from 'rxjs';
 import { SeoService } from 'src/app/services/seo.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-address',
@@ -33,6 +34,8 @@ export class AddressComponent implements OnInit, OnDestroy {
   receieved = 0;
   sent = 0;
 
+  sendNotifications = false;
+
   private tempTransactions: Transaction[];
   private timeTxIndexes: number[];
   private lastTransactionTxId: string;
@@ -45,6 +48,7 @@ export class AddressComponent implements OnInit, OnDestroy {
     private audioService: AudioService,
     private apiService: ApiService,
     private seoService: SeoService,
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit() {
@@ -153,6 +157,10 @@ export class AddressComponent implements OnInit, OnDestroy {
           this.audioService.playSound('chime');
         }
 
+        if (this.sendNotifications && this.notificationService.hasNotificationPermission()) {
+          this.notificationService.sendNotification(this.addressString, $localize`:@@address.new-transaction-notification-body:A new transaction was seen`);
+        }
+
         transaction.vin.forEach((vin) => {
           if (vin.prevout.scriptpubkey_address === this.address.address) {
             this.sent += vin.prevout.value;
@@ -190,6 +198,19 @@ export class AddressComponent implements OnInit, OnDestroy {
         this.transactions = this.transactions.concat(transactions);
         this.isLoadingTransactions = false;
       });
+  }
+
+  async toggleNotifications(enable) {
+    if (enable) {
+      await this.notificationService.askForNotificationPermission();
+      this.sendNotifications = true;
+    } else {
+      this.sendNotifications = false;
+    }
+  }
+
+  hasNotificationSupport() {
+    return NotificationService.supportsNotifications();
   }
 
   updateChainStats() {
