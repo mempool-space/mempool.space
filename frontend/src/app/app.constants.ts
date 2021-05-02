@@ -88,3 +88,27 @@ export const languages: Language[] = [
    { code: 'vi', name: 'Tiếng Việt' },      // Vietnamese
    { code: 'zh', name: '中文' },            // Chinese
 ];
+
+export interface Currency {
+  code: string;
+  name: string;
+}
+
+export const currencies: Currency[] = [
+  { code: 'EGP', name: 'جنيه مصري' },
+  { code: 'CZK', name: 'česká koruna' },
+  { code: 'EUR', name: 'Euro' },
+  { code: 'USD', name: 'US Dollar' },
+  { code: 'IRR', name: 'ریال ایران' },
+  { code: 'KRW', name: '대한민국 원' },
+  { code: 'GEL', name: 'ქართული ლარი' },
+  { code: 'HUF', name: 'Magyar forint' },
+  { code: 'JPY', name: '日本円' },
+  { code: 'NOK', name: 'Norske kroner' },
+  { code: 'BRL', name: 'Real brasileiro' },
+  { code: 'SEK', name: 'Svensk krona' },
+  { code: 'TRY', name: 'Türk Lirası' },
+  { code: 'UAH', name: 'українська гривня' },
+  { code: 'VND', name: 'Đồng Việt Nam' },
+  { code: 'CNY', name: '人民币' },
+];
